@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/public/css/styles.css"> <!-- Tus estilos adicionales -->
+    <!-- Materialize CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <!-- Iconos Material Design -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="icon" href="/media/cdlogo.png" type="image/png">
+    <title>CoffeeDey</title>
+    
+<script>
+$(document).ready(function () {
+    // Inicializar sidenav y modales
+    $('.sidenav').sidenav();
+    $('.modal').modal();
+
+    // Verificar si el usuario está logueado
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+    // Función para agregar un producto a favoritos
+    function addToFavorites(productId, productName, productPrice) {
+        if (!isLoggedIn) {
+            alert('Debes iniciar sesión para agregar a favoritos');
+            return;
+        }
+
+        // Obtener el array de favoritos desde el localStorage
+        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
+        // Crear un objeto para el producto favorito
+        const favoriteProduct = { id: productId, name: productName, price: productPrice };
+
+        // Verificar si el producto ya está en favoritos
+        if (!favorites.some(item => item.id === productId)) {
+            favorites.push(favoriteProduct);
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            alert('Producto agregado a favoritos');
+        } else {
+            alert('Este producto ya está en tus favoritos');
+        }
+    }
+
+    // Lógica de sesión para mostrar nombre de usuario y ocultar/mostrar formulario de login
+    const $loginForm = $('#loginForm');
+    const $welcomeMessage = $('#welcomeMessage');
+    const $displayName = $('#displayName');
+    const $displayBoleta = $('#displayBoleta');
+    const $logoutButton = $('#logoutButton');
+    const $boletaInput = $('#boleta');
+    const $errorBoleta = $('#errorBoleta');
+    const $pageTitle = $('.container .center-align h1'); // Selección del título "Login"
+
+    // Validar que solo se acepten números en el campo "boleta" y verificar que tenga exactamente 10 dígitos
+    $boletaInput.on('input', function () {
+        const value = $(this).val();
+        if (!/^\d*$/.test(value)) {
+            // Si contiene caracteres no numéricos, elimina los no numéricos
+            $(this).val(value.replace(/\D/g, ''));
+            $errorBoleta.text('Solo se permiten números').show();
+        } else {
+            // Si tiene 10 dígitos o más, se asegura que sea exactamente 10
+            if (value.length > 10) {
+                $(this).val(value.slice(0, 10)); // Limita a 10 dígitos
+                $errorBoleta.hide();
+            } else {
+                // Muestra un mensaje si no tiene 10 dígitos
+                $errorBoleta.text('La boleta debe tener exactamente 10 dígitos').show();
+            }
+        }
+    });
+
+    // Función para cargar datos desde Local Storage
+    function loadUser() {
+        const name = localStorage.getItem('name');
+        const boleta = localStorage.getItem('boleta');
+
+        if (name && boleta) {
+            $displayName.text(name);
+            $displayBoleta.text(boleta);
+            $pageTitle.text('Favoritos'); // Cambiar "Login" a "Favoritos"
+            $loginForm.hide();
+            $welcomeMessage.show();
+            localStorage.setItem('isLoggedIn', 'true'); // Marcar que el usuario está logueado
+        }
+    }
+
+    // Guardar datos en Local Storage
+    $loginForm.on('submit', function (e) {
+        e.preventDefault();
+        const name = $('#name').val().trim();
+        const boleta = $boletaInput.val().trim();
+
+        // Validar si los campos no están vacíos y si la boleta tiene exactamente 10 dígitos
+        if (name && boleta && boleta.length === 10) {
+            localStorage.setItem('name', name);
+            localStorage.setItem('boleta', boleta);
+            location.reload();
+            loadUser();
+        } else {
+            M.toast({ html: 'Por favor llena todos los campos correctamente' });
+        }
+    });
+
+    // Cerrar sesión
+    $logoutButton.on('click', function () {
+        localStorage.removeItem('name');
+        localStorage.removeItem('boleta');
+        localStorage.setItem('isLoggedIn', 'false'); // Marcar como no logueado
+        $loginForm.trigger('reset');
+        $pageTitle.text('Login'); // Cambiar "Favoritos" de vuelta a "Login"
+        $loginForm.show();
+        $welcomeMessage.hide();
+        location.reload();
+    });
+
+    // Cargar usuario al inicio
+    loadUser();
+
+    // Agregar evento para el botón de favoritos (en modales de productos)
+    $('.add-to-favorites').on('click', function () {
+        const productId = $(this).data('product-id');
+        const productName = $(this).data('product-name');
+        const productPrice = $(this).data('product-price');
+        addToFavorites(productId, productName, productPrice);
+    });
+});
+</script>
+
+</script>
+</head>
+<body class="grey lighten-4" style="background-image: url('/media/cafe.jpg'); background-size: cover; background-repeat: no-repeat; background-position: center;">
+  <!-- Estructura Flexbox de Materialize -->
+  <div class="wrapper" style="display: flex; flex-direction: column; min-height: 100vh;">
+  
+    <header>
+      <nav>
+          <div class="nav-wrapper navbar-fixed white text-color-black brown lighten-2">
+              <a href="/" class="left brand-logo"><img src="/media/cdlogo.png" alt="logo" style="height: 50px; margin: 5px;"></a>
+              <!-- Ícono que abre el menú lateral -->
+              <a href="#" data-target="mobile-demo" class="right sidenav-trigger"><i class="material-icons white-text">dehaze</i></a>
+              <ul class="right hide-on-med-and-down">
+                  <li><a href="/login" class="white-text waves-purple"><i class="large material-icons left">person</i><b>Login</b></a></li>
+                  <li><a href="/" class="white-text waves-purple"><i class="large material-icons left">local_offer</i><b>Productos</b></a></li>
+                  <li><a href="/cart" class="white-text waves-purple"><i class="large material-icons right">shopping_basket</i><b>Carrito</b></a></li>
+                  <li><a href="/promos" class="light-green-text waves-purple"><i class="large material-icons right">money_off</i><b>Promociones</b></a></li>
+              </ul>
+          </div>
+      </nav>
+    </header>
+
+    <main style="flex-grow: 1;">
+        <!-- Estructura del menú lateral (sidenav) -->
+      <ul id="mobile-demo" class="sidenav brown lighten-2">
+          <li><a href="/login" class="white-text waves-purple"><i class="small material-icons left">person</i>Login</a></li>
+          <li><a href="/" class="white-text waves-purple"><i class="small material-icons left">local_offer</i>Productos</a></li>
+          <li><a href="/cart" class="white-text waves-purple"><i class="small material-icons left">shopping_basket</i>Carrito</a></li>
+          <li><a href="/promos" class="light-green-text waves-purple"><i class="small material-icons left">money_off</i>Promociones</a></li>
+      </ul>
+
+      <div class="container">
+          {{{body}}}
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer brown" style="">
+        <div class="container">
+            <div class="row center-align">
+                <p class="white-text"><b>Coffee Dey</b></p>
+            </div>
+            <div class="footer-copyright" style="">
+                <div class="container white-text" id="footer">
+                    © 2024 Copyright Coffee Dey
+                </div>
+                <div>
+                    <a class="white-text right" href="" target="_blank" style="margin-right: 30px;">@CoffeeDey</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,39 @@
+<h1 class="white-text">Pedidos Recientes</h1>
+<div class="white-text">
+    {{#if pedidos.length}}
+        <table class="highlight">
+            <thead>
+                <tr>
+                    <th>ID del Pedido</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                    <th>Detalles del Carrito</th>
+                    <th>Comprobante de Pago</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each pedidos}}
+                    <tr>
+                        <td>{{id}}</td>
+                        <td>${{total}}</td>
+                        <td>{{status}}</td>
+                        <td>
+                            {{#if cart.length}}
+                                <ul>
+                                    {{#each cart}}
+                                        <li>{{name}} - ${{price}}</li>
+                                    {{/each}}
+                                </ul>
+                            {{else}}
+                                <p>El carrito está vacío.</p>
+                            {{/if}}
+                        </td>
+                        <td>{{#if paymentProof}}{{paymentProof}}{{else}}No disponible{{/if}}</td>
+                    </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    {{else}}
+        <p>No hay pedidos aún.</p>
+    {{/if}}
+</div>

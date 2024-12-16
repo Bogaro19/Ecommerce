@@ -1,0 +1,58 @@
+<div class="container">
+    <div class="center-align">
+        <h1 style="font-weight: 900" class="white-text">Carrito de Compras</h1>
+    </div>
+
+    <div class="row">
+        <div class="col s8">
+            <p class="white-text" style="font-weight: 900; margin: 10px; border-bottom: 2px solid white;">Producto</p>
+        </div>
+        <div class="col s4 right-align">
+            <p class="white-text" style="font-weight: 900; margin: 10px; border-bottom: 2px solid white;">Precio</p>
+        </div>
+    </div>
+
+    <!-- Iterar sobre los productos en el carrito -->
+    {{#each cart}}
+    <div class="row">
+        <div class="col s8">
+            <p class="white-text" style="font-weight: 400; margin: 0; border-bottom: 2px dotted white;">{{name}}</p>
+        </div>
+        <div class="col s4 right-align">
+            <p class="white-text" style="font-weight: 400; margin: 0; border-bottom: 2px dotted white;">$ {{price}}</p>
+        </div>
+        <div class="col s12 right-align">
+            <!-- Botón para eliminar producto -->
+            <form action="/remove-from-cart" method="POST" style="display:inline;">
+                <input type="hidden" name="productId" value="{{id}}">
+                <button class="btn red" type="submit" style="margin: 10px;">
+                    Eliminar
+                </button>
+            </form>
+        </div>
+    </div>
+    {{/each}}
+
+    <!-- Mostrar el total -->
+    <div class="row">
+        <div class="col s12 right-align">
+            <p class="white-text" style="font-weight: 900; margin: 20px 0; font-size: 1.2rem;">
+                <strong>Total:</strong> ${{total}}
+            </p>
+        </div>
+    </div>
+
+    <!-- Botones de acción -->
+    <div class="row center-align">
+        <form action="/checkout" method="GET" style="display:inline;">
+    <button class="btn green" type="submit" style="margin: 10px;">
+        Proceder a comprar
+    </button>
+</form>
+
+        <a href="/" class="btn blue" style="margin: 10px;">Seguir comprando</a>
+    </div>
+
+
+    
+</div>

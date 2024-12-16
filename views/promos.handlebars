@@ -1,0 +1,33 @@
+<div class="container">
+    <div class="center-align">
+        <h1 style="font-weight: 900" class="white-text">Ofertas</h1>
+    </div>
+</div>
+
+<!-- Iterar sobre categorías -->
+{{#each categories}}
+<div class="row">
+    <h2 class="center-align white-text" style="color: white; border-bottom: 2px solid white; padding-bottom: 5px;">{{@key}}</h2>
+    <div class="col s12 m12 l12">
+        <div class="col s8">
+            <p class="white-text" style="font-weight: 900; margin: 10px; border-bottom: 2px solid white;">Producto</p>
+        </div>
+        <div class="col s4 right-align">
+            <p class="white-text" style="font-weight: 900; margin: 10px; border-bottom: 2px solid white;">Mediano/Grande</p>
+        </div>
+        <br>
+    </div>
+    {{#each this}}
+    <div class="col s12 m12 l12">
+        <div class="row">
+            <div class="col s8">
+                <p class="white-text" style="font-weight: 400; margin: 0; border-bottom: 2px dotted white;">{{name}}</p>
+            </div>
+            <div class="col s4 right-align">
+                <p class="white-text" style="font-weight: 400; margin: 0; border-bottom: 2px dotted white;">$ {{price}}</p>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</div>
+{{/each}}

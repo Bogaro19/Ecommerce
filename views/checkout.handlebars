@@ -1,0 +1,47 @@
+<h1 class="center-align white-text">Resumen de tu compra</h1>
+
+<div class="col s12 m12 l12 white-text">
+    <h2>Productos en tu carrito</h2>
+    <table style="border: 2px solid white; border-collapse: collapse; width: 100%;">
+        <thead style="background-color: #333; color: white;">
+            <tr>
+                <th style="border: 1px solid white; padding: 8px;">Nombre</th>
+                <th style="border: 1px solid white; padding: 8px;">Precio</th>
+                <th style="border: 1px solid white; padding: 8px;">Categoría</th>
+                <th style="border: 1px solid white; padding: 8px;">Descripción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each cart}}
+            <tr>
+                <td style="border: 1px solid white; padding: 8px;">{{name}}</td>
+                <td style="border: 1px solid white; padding: 8px;">${{price}}</td>
+                <td style="border: 1px solid white; padding: 8px;">{{category}}</td>
+                <td style="border: 1px solid white; padding: 8px;">{{description}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+    <h3>Total a pagar: ${{total}}</h3>
+</div>
+
+<form action="/confirm-purchase" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="cartData" value='{{json cart}}'>
+    <input type="hidden" name="total" value="{{total}}">
+    
+    <div class="file-field input-field">
+        <div class="btn blue-light-3">
+            <span>Subir comprobante</span>
+            <input type="file" name="paymentProof" accept="image/*" required>
+        </div>
+        <div class="file-path-wrapper">
+            <input class="file-path validate white-text" type="text" placeholder="Sube tu comprobante de pago">
+        </div>
+    </div>
+    <br><br>
+    <div class="center-align">
+        <button type="submit" class="btn green">Confirmar Compra</button>
+        <a href="/cancel-purchase" class="btn red">Cancelar Compra</a>
+    </div>
+</form>

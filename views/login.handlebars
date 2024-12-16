@@ -1,0 +1,101 @@
+<script>
+$(document).ready(function () {
+    // Simulación de datos de administrador
+    const adminCredentials = {
+        name: 'josezabdiel.19',
+        boleta: '1234900990'
+    };
+
+    // Manejo del formulario de login
+    $('#loginForm').on('submit', function (e) {
+        e.preventDefault(); // Prevenir envío del formulario
+
+        const name = $('#name').val().trim();
+        const boleta = $('#boleta').val().trim();
+
+        // Validar si las credenciales coinciden
+        if (name === adminCredentials.name && boleta === adminCredentials.boleta) {
+            // Simular redirección a admin.handlebars
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('userName', name);
+            window.location.href = '/admin'; // Redirige a la página del admin
+        } else {
+            // Mostrar mensaje de error si las credenciales no coinciden
+            $('#errorBoleta').text('Credenciales inválidas').show();
+        }
+    });
+
+    // Manejo del botón de cerrar sesión
+    $('#logoutButton').on('click', function () {
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('userName');
+        window.location.href = '/'; // Redirige al login
+    });
+
+    // Comprobar si el usuario está logueado
+    function checkLoginStatus() {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const userName = localStorage.getItem('userName');
+
+        if (isLoggedIn) {
+            $('#loginForm').hide();
+            $('#welcomeMessage').show();
+            $('#displayName').text(userName);
+        } else {
+            $('#loginForm').show();
+            $('#welcomeMessage').hide();
+        }
+    }
+
+    checkLoginStatus();
+});
+</script>
+
+<div class="container">
+    <div class="center-align">
+        <h1 style="font-weight: 800" class="white-text">Login</h1>
+    </div>
+    <div class="row">
+        <form id="loginForm" class="col s12">
+            <div class="input-field">
+                <input id="name" type="text" style="color: white;" required>
+                <label for="name" class="white-text">Nombre</label>
+            </div>
+            <div class="input-field">
+                <input id="boleta" type="text" style="color: white;" required>
+                <label for="boleta" class="white-text">Número de boleta</label>
+                <span class="helper-text" id="errorBoleta" style="color: red; display: none; font-weight: 700"></span>
+            </div>
+            
+            <div class="center-align">
+                <button type="submit" class="btn waves-effect waves-light brown white-text" style="font-weight: 600;">Iniciar sesión</button>  
+            </div>
+        </form>
+        
+        <div class="row center-align">
+            <div class="col s12 m12">
+                <div class="card white">
+                    <div class="card-content black-text">
+                        <span class="card-title" style="color: red; font-weight: 900">¡AVISO!</span>
+                        <p>Los datos ingresados no son recopilados, se almacenan de manera local en tu dispositivo. Al borrar datos de navegación, también se eliminarán estos datos.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="welcomeMessage" class="center-align" style="display: none;">
+        <h4 class="white-text">Bienvenido, <span id="displayName"></span>!</h4>
+        <p class="white-text">Aquí encontrarás tus productos favoritos.</p>
+        <button id="logoutButton" class="btn red waves-effect waves-light red">Cerrar sesión</button>
+
+        <div id="favoritesList" class="container">
+            <div class="center-align">
+                <h1 style="font-weight: 800" class="white-text">Mis Favoritos</h1>
+            </div>
+            <div class="row" id="favoritesContainer">
+                <!-- Aquí se mostrarán los productos favoritos -->
+            </div>
+        </div>
+    </div>
+</div>

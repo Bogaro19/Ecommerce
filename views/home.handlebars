@@ -1,0 +1,72 @@
+
+<div class="container">
+    <div class="center-align">
+        <h1 style="font-weight: 900" class="white-text">Menú</h1>
+    </div>
+</div>
+
+<!-- Iterar sobre categorías -->
+{{#each categories}}
+<div class="row">
+    <h2 class="center-align white-text" style="color: white; border-bottom: 2px solid white; padding-bottom: 5px;">{{@key}}</h2>
+    <div class="col s12 m12 l12">
+        <div class="col s8">
+            <p class="white-text" style="font-weight: 900; margin: 10px; border-bottom: 2px solid white;">Producto</p>
+        </div>
+        <div class="col s4 right-align">
+            <p class="white-text" style="font-weight: 900; margin: 10px; border-bottom: 2px solid white;">Mediano/Grande</p>
+        </div>
+    </div>
+
+    {{#each this}}
+    <div class="col s12 m12 l12">
+        <div class="row">
+            <div class="col s8" style="border-bottom: 2px dotted white;">
+                <a class="waves-effect modal-trigger" href="#modal-{{id}}"><p class="white-text" style="font-weight: 400; margin: 0;" >{{name}}</p></a>
+            </div>
+            <div class="col s4 right-align">
+                <p class="white-text" style="font-weight: 400; margin: 0; border-bottom: 2px dotted white;">$ {{price}}</p>
+            </div>
+        </div>
+        
+        <!-- Modal Structure -->
+        <div id="modal-{{id}}" class="modal">
+            <div class="modal-content">
+                
+
+                
+                <div class="">
+                    <div class="">
+                        <h4>{{name}}</h4>
+                        <p><strong>Precio:</strong> ${{price}}</p>
+                        <p><strong>Categoría:</strong> {{category}}</p>
+                        <p>{{description}}</p>
+                        <button class="btn brown add-to-favorites"
+                                data-product-id="{{id}}"
+                                data-product-name="{{name}}"
+                                data-product-price="{{price}}">
+                            <i class="material-icons white-text">favorite</i> Agregar a Favoritos
+                        </button>
+                    </div>
+                    
+                    <div class="right-align">
+                        <form action="/add-to-cart" method="POST">
+                        <input type="hidden" name="productId" value="{{id}}">
+                        <button class="btn brown" type="submit" ><i class="material-icons white-text">add_shopping_cart</i>Agregar al Carrito<span style="font-weight: 900">${{price}}</span> </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cerrar</a>
+            </div>
+            
+        </div>
+
+
+
+
+    </div>
+    {{/each}}
+</div>
+{{/each}}
